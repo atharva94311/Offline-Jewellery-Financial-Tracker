@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Responsive meta tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Offline Jewellery Financial Tracker</title>
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-p1CmS/cNqbX64+I6D9I2W9O9m8mdKcO9QfS7Vx0d+YRGvJ80MzvC1aG6DMeZtJuUnTcLHRwI0D9I1V2z+4D6YQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      /* CSS Variables for a modern, corporate palette */
+      :root {
+        --primary-color: #003366;
+        --secondary-color: #00509e;
+        --accent-color: #00a8e8;
+        --light-bg: #ffffff;
+        --light-gray: #f7f7f7;
+        --text-color: #333333;
+        --muted-text: #666666;
+        --border-color: #e0e0e0;
+        --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Dark Mode Variables */
+      .dark {
+        --primary-color: #90caf9;
+        --secondary-color: #42a5f5;
+        --accent-color: #82b1ff;
+        --light-bg: #1e1e1e;
+        --light-gray: #121212;
+        --text-color: #e0e0e0;
+        --muted-text: #b0b0b0;
+        --border-color: #333333;
+      }
+
+      /* Global Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Poppins', sans-serif;
+        background: var(--light-gray);
+        color: var(--text-color);
+        line-height: 1.6;
+        transition: background 0.3s ease, color 0.3s ease;
+        font-variant-numeric: tabular-nums;
+      }
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        color: var(--primary-color);
+      }
+      h2 {
+        font-size: 2rem;
+        margin-bottom: 15px;
+        color: var(--primary-color);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 40px auto;
+        background: var(--light-bg);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+      }
+
+      /* Navigation */
+      nav {
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        padding: 15px;
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+      }
+      nav a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s;
+        font-size: 1.1rem;
+      }
+      nav a:hover {
+        color: var(--accent-color);
+      }
+      nav a i {
+        margin-right: 8px;
+      }
+
+      /* Page Layout */
+      .page {
+        display: none;
+        padding: 20px;
+        animation: fadeIn 0.5s ease-in-out;
+      }
+      .active {
+        display: block;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      /* Card Style */
+      .card {
+        background: var(--light-bg);
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: var(--card-shadow);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Forms */
+      form {
+        background: var(--light-bg);
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: var(--card-shadow);
+      }
+      form label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+      form input, form textarea {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      }
+      form input:focus, form textarea:focus {
+        border-color: var(--accent-color);
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 168, 232, 0.5);
+      }
+      form button {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+        border: none;
+        border-radius: 6px;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+      }
+      form button:hover {
+        background: var(--secondary-color);
+      }
+      form button:active {
+        transform: scale(0.98);
+      }
+
+      /* Tables */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        font-variant-numeric: tabular-nums;
+      }
+      table th, table td {
+        padding: 16px;
+        border: 1px solid var(--border-color);
+        text-align: left;
+        font-size: 0.95rem;
+      }
+      table th {
+        background: var(--primary-color);
+        color: #fff;
+      }
+      table tbody tr:nth-child(even) {
+        background: var(--light-gray);
+      }
+      table tbody tr:hover {
+        background: #e9f1f7;
+      }
+      /* Inline Form Row Styling */
+      .inline-form td {
+        background: #eef6fd;
+      }
+      .inline-form input {
+        margin: 0 5px;
+      }
+
+      /* Buttons */
+      .action-btn, .delete-btn, .export-btn {
+        padding: 10px 16px;
+        border: none;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+      }
+      .action-btn {
+        background: #28a745;
+        color: #fff;
+      }
+      .action-btn:hover {
+        background: #218838;
+      }
+      .delete-btn {
+        background: #d9534f;
+        color: #fff;
+      }
+      .delete-btn:hover {
+        background: #c9302c;
+      }
+      .export-btn {
+        background: var(--accent-color);
+        color: #fff;
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 20px;
+      }
+      .export-btn:hover {
+        background: #0092cc;
+      }
+      .action-btn:active,
+      .delete-btn:active,
+      .export-btn:active {
+        transform: scale(0.98);
+      }
+
+      /* Profile Page Layout: Two Columns */
+      .profile-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+      .profile-left {
+        flex: 1 1 300px;
+      }
+      .profile-right {
+        flex: 2 1 500px;
+      }
+      .profile-card {
+        background: var(--light-bg);
+        padding: 30px;
+        border-radius: 8px;
+        text-align: left;
+        box-shadow: var(--card-shadow);
+      }
+      .profile-dashboard h2 {
+        margin-bottom: 10px;
+        font-size: 1.8rem;
+        color: var(--primary-color);
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 10px;
+      }
+      .profile-dashboard p {
+        margin: 8px 0;
+        font-size: 1rem;
+        color: var(--muted-text);
+      }
+      /* Inline Editing Styling */
+      .editable {
+        border-bottom: 1px dashed var(--accent-color);
+        padding: 2px 4px;
+        cursor: text;
+      }
+      /* Profile Actions Styling */
+      .profile-actions {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 20px;
+      }
+      /* Summary Items Styling */
+      .summary-item {
+        background: var(--light-bg);
+        padding: 15px;
+        border-radius: 6px;
+        box-shadow: var(--card-shadow);
+        margin: 5px;
+        flex: 1 1 150px;
+        text-align: center;
+      }
+      /* Positive/Negative color coding */
+      .positive {
+        color: green;
+      }
+      .negative {
+        color: red;
+      }
+      /* Responsive */
+      @media (max-width: 768px) {
+        nav {
+          flex-direction: column;
+          align-items: center;
+        }
+        nav a {
+          margin: 5px 10px;
+          font-size: 1rem;
+        }
+        table th, table td {
+          font-size: 0.85rem;
+          padding: 10px;
+        }
+        .profile-container {
+          flex-direction: column;
+        }
+      }
+      @media (max-width: 480px) {
+        .card {
+          padding: 15px;
+        }
+        form input, form textarea {
+          padding: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body aria-label="Offline Jewellery Financial Tracker">
+    <div class="container">
+      <!-- Navigation Bar -->
+      <nav role="navigation" aria-label="Main Navigation">
+        <a href="#" onclick="showPage('loansPage')"><i class="fas fa-hand-holding-usd"></i>Loans</a>
+        <a href="#" onclick="showPage('summaryPage')"><i class="fas fa-chart-line"></i>Financial Summary</a>
+        <a href="#" onclick="showPage('peoplePage')"><i class="fas fa-users"></i>People List</a>
+        <a href="#" onclick="showPage('settingsPage')"><i class="fas fa-cog"></i>Settings</a>
+      </nav>
+
+      <!-- Loans Page (Default Home Screen) -->
+      <div id="loansPage" class="page active">
+        <!-- Dashboard Overview -->
+        <div class="card" id="dashboardOverview"></div>
+        <h1>Loan Management</h1>
+        <div class="card">
+          <!-- Loan Entry Form -->
+          <form id="loan-form" aria-label="Add New Loan">
+            <h2>New Loan Entry</h2>
+            <label for="customerName">Customer Name:</label>
+            <input type="text" id="customerName" required />
+            <label for="amountLent">Amount Lent:</label>
+            <input type="number" id="amountLent" required />
+            <label for="dateLent">Date Lent:</label>
+            <input type="date" id="dateLent" required />
+            <label for="loanNotes">Loan Notes:</label>
+            <textarea id="loanNotes" placeholder="Enter loan-specific notes (optional)"></textarea>
+            <!-- Collateral fields: optional for new customers -->
+            <label for="goldCollateral">Gold Collateral (grams, optional):</label>
+            <input type="number" id="goldCollateral" placeholder="Enter gold collateral (optional)" step="0.01" />
+            <label for="silverCollateral">Silver Collateral (grams, optional):</label>
+            <input type="number" id="silverCollateral" placeholder="Enter silver collateral (optional)" step="0.01" />
+            <button type="submit">Add Loan</button>
+          </form>
+        </div>
+        <div class="card" style="text-align: center;">
+          <!-- Export options on Home Screen -->
+          <button class="export-btn" onclick="exportToCSV()">Export Data as CSV</button>
+          <button class="export-btn" onclick="exportDataAsJSON()">Export Data as JSON</button>
+          <button class="export-btn" onclick="exportDataPrompt()">Export Data (Choose Format)</button>
+        </div>
+      </div>
+
+      <!-- Financial Summary Page -->
+      <div id="summaryPage" class="page">
+        <h1>Financial Summary</h1>
+        <div class="card" id="detailed-summary">
+          <!-- Aggregated summary details will be inserted here -->
+        </div>
+        <div class="card" style="text-align: center; margin-bottom: 15px;">
+          <label for="summaryStart">From:</label>
+          <input type="date" id="summaryStart" />
+          <label for="summaryEnd">To:</label>
+          <input type="date" id="summaryEnd" />
+          <label for="loanStatusFilter">Loan Status:</label>
+          <select id="loanStatusFilter" onchange="updateSummaryPage()">
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="returned">Returned</option>
+          </select>
+          <button onclick="updateSummaryPage()">Filter</button>
+        </div>
+        <div class="card">
+          <table aria-label="Summary Table">
+            <thead>
+              <tr>
+                <th>Loan ID</th>
+                <th>Customer</th>
+                <th>Amount Lent</th>
+                <th>Total Repayments</th>
+                <th>Final/Current Amount</th>
+                <th>Interest Accrued</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="summary-table-body">
+              <!-- Summary table rows will be inserted here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- People List Page -->
+      <div id="peoplePage" class="page">
+        <h1>People List</h1>
+        <!-- Search & Sort Controls -->
+        <div class="card">
+          <label for="peopleSearch">Search People:</label>
+          <input type="text" id="peopleSearch" placeholder="Enter name to search" oninput="updatePeoplePage()">
+          <label for="peopleSort">Sort By:</label>
+          <select id="peopleSort" onchange="updatePeoplePage()">
+            <option value="name">Name</option>
+            <option value="totalLent">Total Money Lent</option>
+            <option value="totalRepayments">Total Repayments</option>
+            <option value="recency">Recency</option>
+          </select>
+        </div>
+        <div class="card">
+          <table aria-label="People Table">
+            <thead>
+              <tr>
+                <th>Customer Name</th>
+                <th>Total Money Lent</th>
+              </tr>
+            </thead>
+            <tbody id="people-table-body">
+              <!-- People list rows will be inserted here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Person Profile Page -->
+      <div id="personDetailsPage" class="page">
+        <h1>Person Profile</h1>
+        <div class="profile-container">
+          <!-- Left Column: Profile Details Dashboard -->
+          <div class="profile-left">
+            <div class="profile-card" id="person-profile-card">
+              <!-- Dashboard content will be inserted here -->
+            </div>
+            <div class="profile-actions">
+              <button class="delete-btn" onclick="deletePerson()">Delete Profile</button>
+            </div>
+          </div>
+          <!-- Right Column: Person's Loan Details -->
+          <div class="profile-right">
+            <div class="card">
+              <table aria-label="Person Loans Table">
+                <thead>
+                  <tr>
+                    <th>Loan ID</th>
+                    <th>Amount Lent</th>
+                    <th>Date Lent</th>
+                    <th>Loan Notes</th>
+                    <th>Repayments</th>
+                    <th>Outstanding</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="person-loans-table-body">
+                  <!-- Person loans rows will go here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="text-align: center;">
+          <button class="export-btn" onclick="backToPeopleList()">Back to People List</button>
+        </div>
+      </div>
+
+      <!-- Settings Page for Data Import/Export & Appearance -->
+      <div id="settingsPage" class="page">
+        <h1>Settings & Data Management</h1>
+        <div class="card">
+          <h2>Import/Export Data</h2>
+          <button onclick="exportDataAsJSON()">Export Data as JSON</button>
+          <br /><br />
+          <input type="file" id="jsonImport" accept=".json" aria-label="Import JSON Data" />
+          <button onclick="importData()">Import Data from JSON</button>
+        </div>
+        <div class="card">
+          <h2>Appearance</h2>
+          <button id="darkModeToggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      /*************** Global Data and Save Functions ***************/
+      let loans = JSON.parse(localStorage.getItem("loans")) || [];
+      let people = JSON.parse(localStorage.getItem("people")) || [];
+      function saveLoans() {
+        localStorage.setItem("loans", JSON.stringify(loans));
+      }
+      function savePeople() {
+        localStorage.setItem("people", JSON.stringify(people));
+      }
+
+      /*************** Utility Functions ***************/
+      function formatMoney(value) {
+        return "₹" + parseFloat(value).toLocaleString("en-IN", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      }
+      function getTodayDate() {
+        return new Date().toISOString().split("T")[0];
+      }
+      function monthsBetween(date1, date2) {
+        return (date2 - date1) / (1000 * 60 * 60 * 24 * 30);
+      }
+      function calculateOutstanding(loan, asOfDateStr) {
+        let principal = loan.amountLent;
+        let lastDate = new Date(loan.dateLent);
+        let reps = loan.repayments.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
+        reps.forEach(rep => {
+          let repDate = new Date(rep.date);
+          let months = monthsBetween(lastDate, repDate);
+          principal = principal + (principal * 0.03 * months);
+          principal -= rep.amount;
+          lastDate = repDate;
+        });
+        let asOf = new Date(asOfDateStr);
+        let months = monthsBetween(lastDate, asOf);
+        principal = principal + (principal * 0.03 * months);
+        return principal;
+      }
+      function totalRepayments(loan) {
+        return loan.repayments.reduce((sum, rep) => sum + rep.amount, 0);
+      }
+      function totalRepaymentsForPerson(personId) {
+        let personLoans = loans.filter(loan => loan.customerId === personId);
+        return personLoans.reduce((sum, loan) => sum + totalRepayments(loan), 0);
+      }
+
+      /*************** Navigation ***************/
+      function showPage(pageId) {
+        document.querySelectorAll(".page").forEach(page => {
+          page.classList.remove("active");
+        });
+        document.getElementById(pageId).classList.add("active");
+        if (pageId === "summaryPage") updateSummaryPage();
+        if (pageId === "peoplePage") updatePeoplePage();
+        if (pageId === "loansPage") updateDashboard();
+      }
+
+      /*************** Dashboard Overview ***************/
+      function updateDashboard() {
+        let totalLoans = loans.length;
+        let totalLent = loans.reduce((sum, loan) => sum + loan.amountLent, 0);
+        let activeCount = loans.filter(loan => !loan.isReturned).length;
+        let returnedCount = loans.filter(loan => loan.isReturned).length;
+        document.getElementById("dashboardOverview").innerHTML = `
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+            <div class="summary-item"><strong>Total Loans:</strong> ${totalLoans}</div>
+            <div class="summary-item"><strong>Total Money Lent:</strong> ${formatMoney(totalLent)}</div>
+            <div class="summary-item"><strong>Active Loans:</strong> ${activeCount}</div>
+            <div class="summary-item"><strong>Returned Loans:</strong> ${returnedCount}</div>
+          </div>
+        `;
+      }
+
+      /*************** Loan Management Functions ***************/
+      document.getElementById("loan-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        let custName = document.getElementById("customerName").value.trim();
+        let loanDate = document.getElementById("dateLent").value;
+        if (!custName) {
+          alert("Customer name is required.");
+          return;
+        }
+        if (!loanDate) {
+          alert("Please select a loan date.");
+          return;
+        }
+        if (new Date(loanDate) > new Date()) {
+          alert("Loan date cannot be in the future.");
+          return;
+        }
+        let person = people.find(p => p.name.toLowerCase() === custName.toLowerCase());
+        if (!person) {
+          let gold = document.getElementById("goldCollateral").value;
+          let silver = document.getElementById("silverCollateral").value;
+          person = {
+            id: Date.now(),
+            name: custName,
+            notes: "",
+            goldCollateral: parseFloat(gold) || 0,
+            silverCollateral: parseFloat(silver) || 0
+          };
+          people.push(person);
+          savePeople();
+        }
+        const loanData = {
+          id: Date.now(),
+          customerId: person.id,
+          customerName: person.name,
+          amountLent: parseFloat(document.getElementById("amountLent").value),
+          dateLent: document.getElementById("dateLent").value,
+          notes: document.getElementById("loanNotes").value,
+          repayments: [],
+          isReturned: false,
+          finalReturnDate: null
+        };
+        loans.push(loanData);
+        saveLoans();
+        alert("Loan added successfully.");
+        this.reset();
+        updateDashboard();
+      });
+
+      // Inline Add Payment Form
+      function showAddPaymentForm(loanId, row) {
+        // Prevent multiple inline forms
+        if (row.nextElementSibling && row.nextElementSibling.classList.contains("inline-form")) {
+          return;
+        }
+        let defaultDate = getTodayDate();
+        let inlineFormHTML = `
+          <tr class="inline-form">
+            <td colspan="8">
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <label>Repayment Date: <input type="date" id="repDate_${loanId}" value="${defaultDate}" /></label>
+                <label>Amount: <input type="number" id="repAmount_${loanId}" placeholder="Amount" /></label>
+                <button onclick="savePayment(${loanId}, this)">Save</button>
+                <button onclick="cancelInlineForm(this)">Cancel</button>
+              </div>
+            </td>
+          </tr>
+        `;
+        row.insertAdjacentHTML("afterend", inlineFormHTML);
+      }
+      function savePayment(loanId, btn) {
+        let repDate = document.getElementById(`repDate_${loanId}`).value;
+        let repAmount = parseFloat(document.getElementById(`repAmount_${loanId}`).value);
+        if (!repDate) {
+          alert("Please enter a repayment date.");
+          return;
+        }
+        if (isNaN(repAmount) || repAmount <= 0) {
+          alert("Please enter a valid repayment amount.");
+          return;
+        }
+        let loan = loans.find(l => l.id === loanId);
+        if (!loan) return;
+        loan.repayments.push({ amount: repAmount, date: repDate });
+        saveLoans();
+        cancelInlineForm(btn);
+        updatePersonLoans(currentPersonId);
+      }
+      // Inline Finalize Loan Form
+      function showFinalizeLoanForm(loanId, row) {
+        if (row.nextElementSibling && row.nextElementSibling.classList.contains("inline-form")) {
+          return;
+        }
+        let defaultDate = getTodayDate();
+        let inlineFormHTML = `
+          <tr class="inline-form">
+            <td colspan="8">
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <label>Final Return Date: <input type="date" id="finalDate_${loanId}" value="${defaultDate}" /></label>
+                <button onclick="saveFinalize(${loanId}, this)">Finalize</button>
+                <button onclick="cancelInlineForm(this)">Cancel</button>
+              </div>
+            </td>
+          </tr>
+        `;
+        row.insertAdjacentHTML("afterend", inlineFormHTML);
+      }
+      function saveFinalize(loanId, btn) {
+        let finalDate = document.getElementById(`finalDate_${loanId}`).value;
+        if (!finalDate) {
+          alert("Please enter a final return date.");
+          return;
+        }
+        let loan = loans.find(l => l.id === loanId);
+        if (!loan) return;
+        let finalCost = calculateOutstanding(loan, finalDate);
+        if (!confirm(`Final amount due is ${formatMoney(finalCost)}. Confirm finalization?`)) {
+          return;
+        }
+        loan.finalReturnDate = finalDate;
+        loan.isReturned = true;
+        saveLoans();
+        cancelInlineForm(btn);
+        updatePersonLoans(currentPersonId);
+      }
+      function cancelInlineForm(btn) {
+        let inlineRow = btn.closest("tr.inline-form");
+        if (inlineRow) inlineRow.remove();
+      }
+
+      /*************** Financial Summary Functions ***************/
+      function updateSummaryPage() {
+        let startDate = document.getElementById("summaryStart").value;
+        let endDate = document.getElementById("summaryEnd").value;
+        let filteredLoans = loans;
+        if (startDate && endDate) {
+          filteredLoans = loans.filter(loan => loan.dateLent >= startDate && loan.dateLent <= endDate);
+        }
+        // Loan status filtering
+        let statusFilter = document.getElementById("loanStatusFilter").value;
+        if (statusFilter === "active") {
+          filteredLoans = filteredLoans.filter(loan => !loan.isReturned);
+        } else if (statusFilter === "returned") {
+          filteredLoans = filteredLoans.filter(loan => loan.isReturned);
+        }
+        let totalLoans = filteredLoans.length;
+        let totalLent = filteredLoans.reduce((sum, loan) => sum + loan.amountLent, 0);
+        let totalRepaid = filteredLoans.reduce((sum, loan) => sum + (loan.isReturned
+          ? (calculateOutstanding(loan, loan.finalReturnDate) + totalRepayments(loan))
+          : totalRepayments(loan)), 0);
+        let totalInterest = filteredLoans.reduce((sum, loan) => {
+          let repaid = totalRepayments(loan);
+          let currentAmount = loan.isReturned
+            ? calculateOutstanding(loan, loan.finalReturnDate)
+            : calculateOutstanding(loan, getTodayDate());
+          return sum + (currentAmount + repaid - loan.amountLent);
+        }, 0);
+        let activeCount = filteredLoans.filter(loan => !loan.isReturned).length;
+        let returnedCount = filteredLoans.filter(loan => loan.isReturned).length;
+        document.getElementById("detailed-summary").innerHTML = `
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+            <div class="summary-item"><strong>Total Loans:</strong> ${totalLoans}</div>
+            <div class="summary-item"><strong>Total Money Lent:</strong> ${formatMoney(totalLent)}</div>
+            <div class="summary-item"><strong>Total Repaid Amount:</strong> ${formatMoney(totalRepaid)}</div>
+            <div class="summary-item"><strong>Total Interest Earned:</strong> ${formatMoney(totalInterest)}</div>
+            <div class="summary-item"><strong>Active Loans:</strong> ${activeCount}</div>
+            <div class="summary-item"><strong>Returned Loans:</strong> ${returnedCount}</div>
+          </div>
+        `;
+        const tbody = document.getElementById("summary-table-body");
+        tbody.innerHTML = "";
+        let todayStr = getTodayDate();
+        filteredLoans.forEach(loan => {
+          let repaid = totalRepayments(loan);
+          let currentAmount = loan.isReturned
+            ? calculateOutstanding(loan, loan.finalReturnDate)
+            : calculateOutstanding(loan, todayStr);
+          let interestAccrued = currentAmount + repaid - loan.amountLent;
+          let status = loan.isReturned ? "Returned" : "Active";
+          let row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${loan.id}</td>
+            <td>${loan.customerName}</td>
+            <td>${formatMoney(loan.amountLent)}</td>
+            <td>${formatMoney(repaid)}</td>
+            <td>${formatMoney(currentAmount)}</td>
+            <td>${formatMoney(interestAccrued)}</td>
+            <td>${status}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+
+      /*************** People Management Functions ***************/
+      let currentPersonId = null;
+      function updatePeoplePage() {
+        let searchTerm = document.getElementById("peopleSearch").value.toLowerCase();
+        let sortBy = document.getElementById("peopleSort").value;
+        let filteredPeople = people.filter(p => p.name.toLowerCase().includes(searchTerm));
+        filteredPeople.sort((a, b) => {
+          if (sortBy === "name") {
+            return a.name.localeCompare(b.name);
+          } else if (sortBy === "totalLent") {
+            let totalA = loans.filter(loan => loan.customerId === a.id).reduce((sum, loan) => sum + loan.amountLent, 0);
+            let totalB = loans.filter(loan => loan.customerId === b.id).reduce((sum, loan) => sum + loan.amountLent, 0);
+            return totalB - totalA;
+          } else if (sortBy === "totalRepayments") {
+            let totalA = loans.filter(loan => loan.customerId === a.id).reduce((sum, loan) => sum + totalRepayments(loan), 0);
+            let totalB = loans.filter(loan => loan.customerId === b.id).reduce((sum, loan) => sum + totalRepayments(loan), 0);
+            return totalB - totalA;
+          } else if (sortBy === "recency") {
+            return b.id - a.id;
+          }
+        });
+        let tbody = document.getElementById("people-table-body");
+        tbody.innerHTML = "";
+        filteredPeople.forEach(person => {
+          let personLoans = loans.filter(loan => loan.customerId === person.id);
+          let totalLent = personLoans.reduce((sum, loan) => sum + loan.amountLent, 0);
+          let row = document.createElement("tr");
+          row.style.cursor = "pointer";
+          row.onclick = function() { managePersonLoans(person.id); };
+          row.innerHTML = `
+            <td>${person.name}</td>
+            <td>${formatMoney(totalLent)}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+      function managePersonLoans(personId) {
+        currentPersonId = personId;
+        let person = people.find(p => p.id === personId);
+        if (!person) return;
+        // Build a beautiful dashboard for profile details with inline editing
+        document.getElementById("person-profile-card").innerHTML = `
+          <div class="profile-dashboard">
+            <h2>Profile Details</h2>
+            <p><strong>Gold Collateral:</strong> <span class="editable" contenteditable="true" onblur="updateCollateral(${person.id}, 'gold', this.innerText)">${person.goldCollateral || 0}</span> grams</p>
+            <p><strong>Silver Collateral:</strong> <span class="editable" contenteditable="true" onblur="updateCollateral(${person.id}, 'silver', this.innerText)">${person.silverCollateral || 0}</span> grams</p>
+            <p><strong>Profile Notes:</strong> <span class="editable" contenteditable="true" onblur="updateCollateral(${person.id}, 'notes', this.innerText)">${person.notes || "None"}</span></p>
+            <p><strong>Total Repayments:</strong> ${formatMoney(totalRepaymentsForPerson(person.id))}</p>
+          </div>
+        `;
+        updatePersonLoans(personId);
+        showPage("personDetailsPage");
+      }
+      function updatePersonLoans(personId) {
+        let personLoans = loans.filter(loan => loan.customerId === personId);
+        let tbody = document.getElementById("person-loans-table-body");
+        tbody.innerHTML = "";
+        let todayStr = getTodayDate();
+        personLoans.forEach(loan => {
+          let outstanding = loan.isReturned
+            ? calculateOutstanding(loan, loan.finalReturnDate)
+            : calculateOutstanding(loan, todayStr);
+          let repaymentDetails = loan.repayments.length > 0
+            ? loan.repayments.map(rep => `${rep.date}: ${formatMoney(rep.amount)}`).join(" | ")
+            : "None";
+          let status = loan.isReturned ? "Returned on " + loan.finalReturnDate : "Active";
+          let actionsHTML = "";
+          if (!loan.isReturned) {
+            actionsHTML =
+              `<button class="action-btn" onclick="showAddPaymentForm(${loan.id}, this.closest('tr'))">Add Payment</button>
+               <button class="action-btn" onclick="showFinalizeLoanForm(${loan.id}, this.closest('tr'))">Finalize Loan</button>`;
+          }
+          let row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${loan.id}</td>
+            <td>${formatMoney(loan.amountLent)}</td>
+            <td>${loan.dateLent}</td>
+            <td>${loan.notes || "None"}</td>
+            <td>${repaymentDetails}</td>
+            <td>${formatMoney(outstanding)}</td>
+            <td>${status}</td>
+            <td>${actionsHTML}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+      function backToPeopleList() {
+        showPage("peoplePage");
+      }
+      // Inline collateral/notes update is handled by updateCollateral() below.
+      function updateCollateral(personId, field, value) {
+        let person = people.find(p => p.id === personId);
+        if(!person) return;
+        if (field === "gold") {
+          let num = parseFloat(value);
+          if(isNaN(num)) { alert("Invalid number for gold collateral"); return; }
+          person.goldCollateral = num;
+        } else if (field === "silver") {
+          let num = parseFloat(value);
+          if(isNaN(num)) { alert("Invalid number for silver collateral"); return; }
+          person.silverCollateral = num;
+        } else if (field === "notes") {
+          person.notes = value;
+        }
+        savePeople();
+        updatePeoplePage();
+        managePersonLoans(personId);
+      }
+      // Delete entire profile and associated loans (central button)
+      function deletePerson() {
+        if (currentPersonId === null) return;
+        if (confirm("Do you really want to delete this profile and all its associated loans? This cannot be undone.")) {
+          loans = loans.filter(loan => loan.customerId !== currentPersonId);
+          people = people.filter(p => p.id !== currentPersonId);
+          saveLoans();
+          savePeople();
+          backToPeopleList();
+        }
+      }
+
+      /*************** Settings (Data Import/Export & Appearance) ***************/
+      function exportDataAsJSON() {
+        let data = { loans: loans, people: people };
+        let jsonStr = JSON.stringify(data, null, 2);
+        let blob = new Blob([jsonStr], { type: "application/json" });
+        let url = URL.createObjectURL(blob);
+        let a = document.createElement("a");
+        a.href = url;
+        a.download = "tracker_data.json";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+      function importData() {
+        let fileInput = document.getElementById("jsonImport");
+        if (fileInput.files.length === 0) {
+          alert("Please select a JSON file to import.");
+          return;
+        }
+        let file = fileInput.files[0];
+        let reader = new FileReader();
+        reader.onload = function (e) {
+          try {
+            let data = JSON.parse(e.target.result);
+            if (data.loans && data.people) {
+              loans = data.loans;
+              people = data.people;
+              saveLoans();
+              savePeople();
+              updatePeoplePage();
+              alert("Data imported successfully.");
+            } else {
+              alert("Invalid data format.");
+            }
+          } catch (err) {
+            alert("Error reading JSON file.");
+          }
+        };
+        reader.readAsText(file);
+      }
+      function toggleDarkMode() {
+        document.body.classList.toggle('dark');
+        localStorage.setItem("darkMode", document.body.classList.contains("dark"));
+      }
+      if (localStorage.getItem("darkMode") === "true") {
+        document.body.classList.add("dark");
+      }
+
+      /*************** Initial Updates ***************/
+      updatePeoplePage();
+      updateDashboard();
+      document.getElementById("dateLent").max = getTodayDate();
+    </script>
+  </body>
+</html>
